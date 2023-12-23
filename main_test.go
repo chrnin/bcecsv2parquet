@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"slices"
 	"testing"
@@ -44,6 +43,6 @@ func Test_writeParquet_hash(t *testing.T) {
 	ass.NoError(err)
 	var parquet bytes.Buffer
 	parquetWrite(bilans, &parquet, 10)
-	parquetBytes := parquet.Bytes()
-	fmt.Println(parquetBytes)
+
+	ass.True(len(parquet.Bytes()) > 0)
 }
