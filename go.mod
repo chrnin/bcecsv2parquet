@@ -1,4 +1,4 @@
-module bcecsv2parquet
+module github.com/chrnin/bcecsv2parquet
 
 go 1.21
 
