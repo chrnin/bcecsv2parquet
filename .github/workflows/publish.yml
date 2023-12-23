@@ -3,7 +3,7 @@ on: [push]
 jobs:
 
   build:
-    name: Build
+    name: Convert CSV to Parquet
     runs-on: ubuntu-latest
     steps:
 
@@ -16,7 +16,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
-      - name: Build
+      - name: Build converter
         run: go build .
 
       - name: Download & install minio client
@@ -35,6 +35,6 @@ jobs:
           mc alias set bce "${BCE_ENDPOINT}" "${BCE_ACCESS_KEY}" "${BCE_PASSWORD}"
           mc cp bce/dge/Export_complet_compte_annuel_INPI.zip .
           
-          unzip -p Export_complet_compte_annuel_INPI.zip|bcecsv2export --output test.parquet
+          unzip -p Export_complet_compte_annuel_INPI.zip|./bcecsv2export --output test.parquet
           ls -al test.parquet
 
