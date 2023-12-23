@@ -20,6 +20,10 @@ jobs:
         run: go build .
 
       - name: Download & install minio client
+        env:
+          BCE_ENDPOINT: ${{ secrets.BCE_ENDPOINT }}
+          BCE_ACCESS_KEY: ${{ secrets.BCE_ACCESS_KEY }}
+          BCE_PASSWORD: ${{ secrets.BCE_PASSWORD }}
         run: |
           curl https://dl.min.io/client/mc/release/linux-amd64/mc \
           --create-dirs \
