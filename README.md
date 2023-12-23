@@ -1,6 +1,8 @@
 # bcecsv2parquet
 conversion de l'export complet des bilans du format CSV vers Parquet
 
+![test passed](https://github.com/github/docs/actions/workflows/go-test.yml/badge.svg)
+
 ## installation/exécution
 ### build
 `go install github.com/chrnin/bcecsv2parquet@install`
