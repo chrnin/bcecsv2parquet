@@ -28,5 +28,9 @@ jobs:
           chmod +x $HOME/minio-binaries/mc
           export PATH=$PATH:$HOME/minio-binaries/
 
-          mc --help
+          mc alias set bce "${BCE_ENDPOINT}" "${BCE_ACCESS_KEY}" "${BCE_PASSWORD}"
+          mc cp bce/dge/Export_complet_compte_annuel_INPI.zip .
+          
+          unzip -p Export_complet_compte_annuel_INPI.zip|bcecsv2export --output test.parquet
+          ls -al test.parquet
 
