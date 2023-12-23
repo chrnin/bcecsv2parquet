@@ -5,11 +5,11 @@ conversion de l'export complet des bilans du format CSV vers Parquet
 ### build
 `go install github.com/chrnin/bcecsv2parquet@install`
 ### run
-`$GOROOT/bin/bcecsv2parquet --input bce.csv --output bce.parquet`
+`$GOBIN/bin/bcecsv2parquet --input bce.csv --output bce.parquet`
 
 ## options
 #### -groupSize int
-taille d'un groupe de ligne, 10 par défaut (default 10)
+taille d'un groupe de ligne, en Mo, 10 par défaut (default 10)
 #### -input string
 fichier d'entrée, Stdin par défaut
 #### -output string
