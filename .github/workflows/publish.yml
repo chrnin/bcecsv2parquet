@@ -21,7 +21,7 @@ jobs:
 
       - name: Download & install minio client
         run: |
-          curl https://dl.min.io/client/mc/release/linux-ppc64le/mc \
+          curl https://dl.min.io/client/mc/release/linux-amd64/mc \
           --create-dirs \
           -o ~/minio-binaries/mc
 
