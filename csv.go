@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/csv"
-	"fmt"
 	"io"
 	"log"
 	"strconv"
@@ -42,7 +41,8 @@ func csvToBilan(output chan Bilan, csvReader *csv.Reader, headers []string) {
 		bilan.Siren = line[0]
 		dateClotureExercice, err := time.Parse("20060102", line[1])
 		if err != nil {
-			fmt.Println(err)
+			bilan.err = err
+			output <- bilan
 			continue
 		}
 		bilan.DateClotureExercice = int32(dateClotureExercice.UnixNano() / int64(24*time.Hour))
@@ -58,6 +58,5 @@ func csvToBilan(output chan Bilan, csvReader *csv.Reader, headers []string) {
 		}
 		output <- bilan
 	}
-
 	close(output)
 }
