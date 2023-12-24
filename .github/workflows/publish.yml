@@ -25,16 +25,6 @@ jobs:
           BCE_ACCESS_KEY: ${{ secrets.BCE_ACCESS_KEY }}
           BCE_PASSWORD: ${{ secrets.BCE_PASSWORD }}
         run: |
-#          curl https://dl.min.io/client/mc/release/linux-amd64/mc \
-#          --create-dirs \
-#          -o ~/minio-binaries/mc
-#
-#          chmod +x $HOME/minio-binaries/mc
-#          export PATH=$PATH:$HOME/minio-binaries/
-#
-#          mc alias set bce "${BCE_ENDPOINT}" "${BCE_ACCESS_KEY}" "${BCE_PASSWORD}"
-#          mc cp bce/dge/Export_complet_compte_annuel_INPI.zip .
           ./bcecsv2export --output test.parquet
-#          unzip -p Export_complet_compte_annuel_INPI.zip|./bcecsv2export --output test.parquet
           ls -al test.parquet
 
