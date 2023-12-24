@@ -25,7 +25,6 @@ jobs:
           --create-dirs \
           -o ${HOME}/minio-binaries/mc
           chmod +x ${HOME}/minio-binaries/mc
-          export PATH=${PATH}:${HOME}/minio-binaries/
 
       - name: Download bce file
         env:
@@ -33,8 +32,8 @@ jobs:
           BCE_ACCESS_KEY: ${{ secrets.BCE_ACCESS_KEY }}
           BCE_PASSWORD: ${{ secrets.BCE_PASSWORD }}
         run: |
-          mc alias set bce "${BCE_ENDPOINT}" "${BCE_ACCESS_KEY}" "${BCE_PASSWORD}"
-          mc cp bce/dge/Export_complet_compte_annuel_INPI.zip export.zip
+          ${HOME}/minio-binaries/mc alias set bce "${BCE_ENDPOINT}" "${BCE_ACCESS_KEY}" "${BCE_PASSWORD}"
+          ${HOME}/minio-binaries/mc cp bce/dge/Export_complet_compte_annuel_INPI.zip export.zip
 
       - name: Convert csv to parquet
         env:
