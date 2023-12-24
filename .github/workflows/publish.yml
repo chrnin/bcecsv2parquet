@@ -25,6 +25,6 @@ jobs:
           BCE_ACCESS_KEY: ${{ secrets.BCE_ACCESS_KEY }}
           BCE_PASSWORD: ${{ secrets.BCE_PASSWORD }}
         run: |
-          ./converter --output test.parquet
+          echo test|./converter --output test.parquet
           ls -al test.parquet
 
