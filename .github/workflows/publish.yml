@@ -20,11 +20,28 @@ jobs:
         run: go build -o converter
 
       - name: Download & install minio client
+        run: |
+          curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+          --create-dirs \
+          -o ${HOME}/minio-binaries/mc
+          chmod +x ${HOME}/minio-binaries/mc
+          export PATH=${PATH}:${HOME}/minio-binaries/
+
+      - name: Download bce file
         env:
           BCE_ENDPOINT: ${{ secrets.BCE_ENDPOINT }}
           BCE_ACCESS_KEY: ${{ secrets.BCE_ACCESS_KEY }}
           BCE_PASSWORD: ${{ secrets.BCE_PASSWORD }}
         run: |
-          echo test|./converter --output test.parquet
+          mc alias set bce "${BCE_ENDPOINT}" "${BCE_ACCESS_KEY}" "${BCE_PASSWORD}"
+          mc cp bce/dge/Export_complet_compte_annuel_INPI.zip export.zip
+
+      - name: Convert csv to parquet
+        env:
+          BCE_ENDPOINT: ${{ secrets.BCE_ENDPOINT }}
+          BCE_ACCESS_KEY: ${{ secrets.BCE_ACCESS_KEY }}
+          BCE_PASSWORD: ${{ secrets.BCE_PASSWORD }}
+        run: |
+          unzip -p export.zip|./converter --output test.parquet
           ls -al test.parquet
 
