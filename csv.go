@@ -37,7 +37,7 @@ func csvToBilan(output chan Bilan, csvReader *csv.Reader, headers []string) {
 			log.Fatal(err)
 		}
 		bilan := Bilan{}
-		bilan.Fields = make(map[string]int32)
+		bilan.Liasse = make(map[string]int32)
 		bilan.Siren = line[0]
 		dateClotureExercice, err := time.Parse("20060102", line[1])
 		if err != nil {
@@ -50,7 +50,7 @@ func csvToBilan(output chan Bilan, csvReader *csv.Reader, headers []string) {
 		for i := 3; i < len(headers); i++ {
 			if line[i] != "" {
 				val, err := strconv.ParseInt(line[i], 10, 32)
-				bilan.Fields[headers[i]] = int32(val)
+				bilan.Liasse[headers[i]] = int32(val)
 				if err != nil {
 					continue
 				}
