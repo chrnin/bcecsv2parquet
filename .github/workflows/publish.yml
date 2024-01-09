@@ -41,6 +41,17 @@ jobs:
           BCE_ACCESS_KEY: ${{ secrets.BCE_ACCESS_KEY }}
           BCE_PASSWORD: ${{ secrets.BCE_PASSWORD }}
         run: |
-          unzip -p export.zip|./converter --output test.parquet
+          unzip -p export.zip|./converter --output export-detail-bilan.parquet
           ls -al test.parquet
 
+      - name: Upload parquet file to data.gouv.fr
+        env:
+          DATAGOUV_APIKEY: ${{ secrets.DATAGOUV_APIKEY }}
+          DATAGOUV_DATASET: ${{ secrets.DATAGOUV_DATASET }}
+          DATAGOUV_RESOURCE: ${{ secrets.DATAGOUV_RESOURCE }}
+          DATAGOUV_API: 'https://www.data.gouv.fr/api/1'
+        run: |
+          curl -H "Accept:application/json" \
+               -H "X-Api-Key:${DATAGOUV_APIKEY}" \
+               -F "file=export-detail-bilan.parquet" \
+               -X POST ${DATAGOUV_API}/datasets/${DATAGOUV_DATASET}/resources/${DATAGOUV_RESOURCE}/upload/
