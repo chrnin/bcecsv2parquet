@@ -42,7 +42,6 @@ jobs:
           BCE_PASSWORD: ${{ secrets.BCE_PASSWORD }}
         run: |
           unzip -p export.zip|./converter --output export-detail-bilan.parquet
-          ls -al test.parquet
 
       - name: Upload parquet file to data.gouv.fr
         env:
