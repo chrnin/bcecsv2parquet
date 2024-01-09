@@ -52,5 +52,5 @@ jobs:
         run: |
           curl -H "Accept:application/json" \
                -H "X-Api-Key:${DATAGOUV_APIKEY}" \
-               -F "file=export-detail-bilan.parquet" \
+               -F "file=@export-detail-bilan.parquet" \
                -X POST ${DATAGOUV_API}/datasets/${DATAGOUV_DATASET}/resources/${DATAGOUV_RESOURCE}/upload/
