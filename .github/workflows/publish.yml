@@ -3,7 +3,6 @@ on:
   schedule:
     - cron: "0 5 * * 2"
 jobs:
-
   build:
     name: Convert CSV to Parquet
     runs-on: ubuntu-latest
