@@ -1,5 +1,7 @@
 name: Go
-on: [push]
+on:
+  schedule:
+    - cron: "0 5 * * 2"
 jobs:
 
   build:
