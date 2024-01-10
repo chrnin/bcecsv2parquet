@@ -14,27 +14,43 @@ jobs:
         id: go
 
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build converter
-        run: go build . -o ./bcecsv2export
+        run: go build -o converter
 
       - name: Download & install minio client
+        run: |
+          curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+          --create-dirs \
+          -o ${HOME}/minio-binaries/mc
+          chmod +x ${HOME}/minio-binaries/mc
+
+      - name: Download bce file
         env:
           BCE_ENDPOINT: ${{ secrets.BCE_ENDPOINT }}
           BCE_ACCESS_KEY: ${{ secrets.BCE_ACCESS_KEY }}
           BCE_PASSWORD: ${{ secrets.BCE_PASSWORD }}
         run: |
-#          curl https://dl.min.io/client/mc/release/linux-amd64/mc \
-#          --create-dirs \
-#          -o ~/minio-binaries/mc
-#
-#          chmod +x $HOME/minio-binaries/mc
-#          export PATH=$PATH:$HOME/minio-binaries/
-#
-#          mc alias set bce "${BCE_ENDPOINT}" "${BCE_ACCESS_KEY}" "${BCE_PASSWORD}"
-#          mc cp bce/dge/Export_complet_compte_annuel_INPI.zip .
-          ./bcecsv2export --output test.parquet
-#          unzip -p Export_complet_compte_annuel_INPI.zip|./bcecsv2export --output test.parquet
-          ls -al test.parquet
+          ${HOME}/minio-binaries/mc alias set bce "${BCE_ENDPOINT}" "${BCE_ACCESS_KEY}" "${BCE_PASSWORD}"
+          ${HOME}/minio-binaries/mc cp bce/dge/Export_complet_compte_annuel_INPI.zip export.zip
 
+      - name: Convert csv to parquet
+        env:
+          BCE_ENDPOINT: ${{ secrets.BCE_ENDPOINT }}
+          BCE_ACCESS_KEY: ${{ secrets.BCE_ACCESS_KEY }}
+          BCE_PASSWORD: ${{ secrets.BCE_PASSWORD }}
+        run: |
+          unzip -p export.zip|./converter --output export-detail-bilan.parquet
+
+      - name: Upload parquet file to data.gouv.fr
+        env:
+          DATAGOUV_APIKEY: ${{ secrets.DATAGOUV_APIKEY }}
+          DATAGOUV_DATASET: ${{ secrets.DATAGOUV_DATASET }}
+          DATAGOUV_RESOURCE: ${{ secrets.DATAGOUV_RESOURCE }}
+          DATAGOUV_API: 'https://www.data.gouv.fr/api/1'
+        run: |
+          curl -H "Accept:application/json" \
+               -H "X-Api-Key:${DATAGOUV_APIKEY}" \
+               -F "file=@export-detail-bilan.parquet" \
+               -X POST ${DATAGOUV_API}/datasets/${DATAGOUV_DATASET}/resources/${DATAGOUV_RESOURCE}/upload/

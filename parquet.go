@@ -11,7 +11,7 @@ func parquetWrite(bilans chan Bilan, output io.Writer, rowGroupSize int64) error
 	if err != nil {
 		return err
 	}
-	pw.RowGroupSize = rowGroupSize * 1024 * 1024 //10M
+	pw.RowGroupSize = rowGroupSize * 1024 * 1024
 	pw.CompressionType = parquet.CompressionCodec_SNAPPY
 
 	for bilan := range bilans {

@@ -13,7 +13,7 @@ func main() {
 	var groupSize int64
 	flag.StringVar(&output, "output", "", "fichier de sortie, Stdout par défaut")
 	flag.StringVar(&input, "input", "", "fichier d'entrée, Stdin par défaut")
-	flag.Int64Var(&groupSize, "groupSize", 10, "taille d'un groupe de ligne, 10 par défaut")
+	flag.Int64Var(&groupSize, "groupSize", 10, "taille d'un groupe de ligne, 10Mo par défaut")
 
 	flag.Parse()
 
