@@ -45,6 +45,7 @@ func csvToBilan(output chan Bilan, csvReader *csv.Reader, headers []string) {
 		bilan.Liasse = make(map[string]int32)
 		bilan.Siren = line[0]
 		dateClotureExercice, err := time.Parse("20060102", line[1])
+		bilan.Confidentiality = line[3]
 		if err != nil {
 			bilan.err = err
 			output <- bilan
