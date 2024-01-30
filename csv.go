@@ -4,7 +4,6 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
-	"log"
 	"strconv"
 	"time"
 )
@@ -35,12 +34,14 @@ func checkHeaders(headers []string) bool {
 func csvToBilan(output chan Bilan, csvReader *csv.Reader, headers []string) {
 	for {
 		line, err := csvReader.Read()
+		bilan := Bilan{}
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			log.Fatal(err)
+			bilan.err = err
+			output <- bilan
+			continue
 		}
-		bilan := Bilan{}
 		bilan.Liasse = make(map[string]int32)
 		bilan.Siren = line[0]
 		dateClotureExercice, err := time.Parse("20060102", line[1])
