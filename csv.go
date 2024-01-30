@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/csv"
+	"fmt"
 	"io"
 	"log"
 	"strconv"
@@ -14,18 +15,21 @@ func readBilan(reader io.ReadCloser) (chan Bilan, error) {
 
 	headers, err := csvReader.Read()
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
-
+	if !checkHeaders(headers) {
+		return nil, fmt.Errorf("l'entête du fichier source ne correspond pas au format attendu")
+	}
 	output := make(chan Bilan)
 	go csvToBilan(output, csvReader, headers)
 	return output, nil
 }
 
 func checkHeaders(headers []string) bool {
-	return headers[0] == "Siren" &&
-		headers[1] == "Date_cloture" &&
-		headers[2] == "Type_bilan"
+	return headers[0] == "siren" &&
+		headers[1] == "date_cloture_exercice" &&
+		headers[2] == "type_bilan" &&
+		headers[3] == "confidentiality"
 }
 
 func csvToBilan(output chan Bilan, csvReader *csv.Reader, headers []string) {
@@ -47,7 +51,7 @@ func csvToBilan(output chan Bilan, csvReader *csv.Reader, headers []string) {
 		}
 		bilan.DateClotureExercice = int32(dateClotureExercice.UnixNano() / int64(24*time.Hour))
 		bilan.TypeBilan = line[2]
-		for i := 3; i < len(headers); i++ {
+		for i := 4; i < len(headers); i++ {
 			if line[i] != "" {
 				val, err := strconv.ParseInt(line[i], 10, 32)
 				bilan.Liasse[headers[i]] = int32(val)
