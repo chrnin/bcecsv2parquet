@@ -1,8 +1,6 @@
 name: Go
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 5 * * 2"
     
 jobs:
   build:
